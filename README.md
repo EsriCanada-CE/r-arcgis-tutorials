@@ -16,13 +16,13 @@ Each of the four tutorials (as well as a version of [this document](https://esri
    * Installing and loading third-party R packages
    * Extract sample data
    * Running basic R script tools from an ArcGIS toolbox<br /><br />
-2. [R Scripting Basics](https://esricanada-ce.github.io/r-arcgis-tutorials/2-R-Scripting-Basics.nb.html):
+2. [R Scripting Basics](https://esricanada-ce.github.io/r-arcgis-tutorials/2-R-Scripting-Basics.nb.html) ([PDF](https://esricanada-ce.github.io/r-arcgis-tutorials/2-R-Scripting-Basics.pdf)):
    * Using R Integrated Development Environments (RStudio Desktop)
    * Writing expressions and executing commands in R
    * Working with basic objects and data types in R
    * Importing and subsetting data in R<br /><br />
    **Note:** *The R Scripting Basics tutorial can be considered optional by anyone that is already well-versed in the R programming language, and familiar with RStudio Desktop or an equivalent IDE for developing R code*<br /><br />
-3. [R-ArcGIS Scripting](https://esricanada-ce.github.io/r-arcgis-tutorials/3-R-ArcGIS-Scripting.nb.html):
+3. [R-ArcGIS Scripting](https://esricanada-ce.github.io/r-arcgis-tutorials/3-R-ArcGIS-Scripting.nb.html) ([PDF](https://esricanada-ce.github.io/r-arcgis-tutorials/3-R-ArcGIS-Scripting.pdf)):
    * Reading/writing ArcGIS datasets using the arcgisbinding package
    * Working with ArcGIS datasets in R
    * Manipulating and analyzing spatial data in R<br /><br />
