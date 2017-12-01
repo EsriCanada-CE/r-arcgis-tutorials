@@ -36,8 +36,6 @@ from Environmental Systems Research Institute Inc. Other product and
 company names mentioned herein may be trademarks or registered
 trademarks of their respective owners. Errors and omissions excepted. This work is licensed
 under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
-License. Some content in this tutorial is derived from Esri’s GeoInquiries template, available
-at http://www.esri.com/connected under a Creative Commons Attribution-NonCommericalShareAlike
-license.
+License.
 
 ![CC-BY-NC-SA-4.0](https://esricanada-ce.github.io/r-arcgis-tutorials/images/CC-BY-NC-SA-4.0.png "CC-BY-NC-SA-4.0")
