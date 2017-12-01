@@ -1,0 +1,9 @@
+*.docx
+*.lock
+*.ini
+*.pptx
+*.7z
+.Rproj.user
+
+data/census/
+data/toronto/
