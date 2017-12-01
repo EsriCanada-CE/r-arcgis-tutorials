@@ -8,7 +8,7 @@
 
 This package consists of four tutorials that deal with integrating the statistical programming language R with ArcGIS for Desktop.  Several concepts are covered which include configuring ArcGIS with R, writing basic R scripts, writing R scripts that use ArcGIS data and functionality, and constructing R Tools for use within ArcGIS Pro or ArcGIS Desktop.  It is recommended that the tutorials are completed in squential order.
 
-Each of the four tutorials (as well as a version of [this document](https://esricanada-ce.github.io/r-arcgis-tutorials/0-Intro-to-R-ArcGIS_package.pdf)), can viewed direclty from your Web browser by following the links below.  However, you must download a complete copy of the tutorial files from the [repository on GitHub](https://github.com/EsriCanada-CE/r-arcgis-tutorials/) if you wish to follow the tutorials interactively using ArcGIS and R softare, along with pre-configured sample data.
+Each of the four tutorials (as well as a version of [this document](https://esricanada-ce.github.io/r-arcgis-tutorials/0-Intro-to-R-ArcGIS_package.pdf)), can viewed direclty from your Web browser by following the links below.  However, you must obtain a complete copy of the tutorial files by downloading the [latest release](https://github.com/EsriCanada-CE/r-arcgis-tutorials/releases/latest) (or by cloning the [tutorial repository](https://github.com/EsriCanada-CE/r-arcgis-tutorials/) on GitHub) if you wish to follow the tutorials interactively using ArcGIS and R softare, along with pre-configured sample data.
 
 1. [Getting Started with the R-ArcGIS Bridge](https://esricanada-ce.github.io/r-arcgis-tutorials/1-Getting-Started.pdf):
    * Installing and setting up R and RStudio
