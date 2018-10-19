@@ -3,14 +3,14 @@ output: html_notebook
 ---
 
 <!-- start formatted header & title -->
-<img src="images/logo.png" style="margin:20px;" /> <p style="margin:20px 20px 0 0; float:right; text-align:right;">Tutorial for ArcGIS Pro 2.0 / ArcGIS Desktop 10.5.1<br /> R-ArcGIS Scripting</p>
+<img src="images/logo.png" style="margin:20px;" /> <p style="margin:20px 20px 0 0; float:right; text-align:right;">Tutorial for ArcGIS Pro 2.2 / ArcGIS Desktop 10.6.1<br /> R-ArcGIS Scripting</p>
 <hr />
 <h1 style="text-align: center; font-weight: bold;">R-ArcGIS Scripting</h1>
 <!-- end formatted header & title -->
 
 # Tutorial Overview
 
-R is an open-source statistical computing language that offers a large suite of data analysis and statistical tools, and is currently the de facto standard for statistical data analysis and visualization for academics and other communities. While its various third-party packages introduce a variety of advanced spatial statistical capabilities, it can be a challenge to access many spatial datasets.  The **R-ArcGIS** bridge solves this challenge by providing an `arcgisbinding` package that allows ArcGIS datasets to be read and written easily from the R programming language. This tutorial will introduce you to the use of the R-ArcGIS Bridge in R scripts, and enable you to integrate ArcGIS datasets into your R statistical processes.  It will also give you have the pre-requisite knowledge to create script tools in ArcGIS that execute R functions, which will be covered in the following tutorial in this series.
+R is an open-source statistical computing language that offers a large suite of data analysis and statistical tools, and is currently the de facto standard for statistical data analysis and visualization for academics and other communities. While its various third-party packages introduce a variety of advanced spatial statistical capabilities, it can be a challenge to access many spatial datasets.  The **R-ArcGIS** bridge solves this challenge by providing an `arcgisbinding` package that allows ArcGIS datasets to be read and written easily from the R programming language. This tutorial will introduce you to the use of the R-ArcGIS Bridge in R scripts, and enable you to integrate ArcGIS datasets into your R statistical processes.  It will also give you the pre-requisite knowledge to create script tools in ArcGIS that execute R functions, which will be covered in the following tutorial in this series.
 
 ### Skills
 
@@ -29,10 +29,10 @@ The following classroom time is required to complete this tutorial:
 ### Materials Required
 
 * *Technology*:
-    * R Statistical Computing Language (version 3.2.0+)
-    * RStudio Desktop (version 1.0.153+)
-    * ArcGIS Pro 1.1+ (2.0+ recommended) or ArcGIS Desktop 10.3.1+ (10.5.1+ recommended)
-    * R-ArcGIS Bindings (1.0.0.128+ recommended)
+    * R Statistical Computing Language (version 3.3.2+)
+    * RStudio Desktop (version 1.1.456+)
+    * ArcGIS Pro 1.1+ (2.2+ recommended) or ArcGIS Desktop 10.3.1+ (10.6.1+ recommended)
+    * R-ArcGIS Bindings (1.0.1.232+ recommended)
  
 * *Data*:
     * Data for this tutorial are included as part of the download in the packaged `data` folder.
@@ -49,7 +49,7 @@ The following classroom time is required to complete this tutorial:
 
 The Education and Research Group at Esri Canada makes every effort to present accurate and reliable information. The Web sites and URLs used in this tutorial are from sources that were current at the time of production, but are subject to change without notice to Esri Canada.
 
-* Production Date: November 2017
+* Production Date: October 2018
 
 ## Background Information
 
@@ -92,21 +92,21 @@ To work with the R Markdown source for this document:
 
 ***Note:*** The remainder of this document is written with the expectation that you are working with the R Markdown file in **RStudio**. If not, you may manually copy R commands enclosed in the \`\`\`\{r\} code blocks into any R console, provided that your current working directory (reported by `getwd()`) corresponds with the location where the tutorial files are located.
 
-Before proceeding to interactively run code in the rest of the R Markdown document, select *Restart R and Clear Output* from the ![Run](images/rstudio-runmenu.jpg) menu, and then run the following block to configure the R environment to help with the display of outputs in the resulting R Notebook, and to prepare a `data.gdb` file geodatabase from an empty template:
+Before proceeding to interactively run code in the rest of the R Markdown document, select *Restart R and Clear Output* from the ![Run](images/rstudio-runmenu.jpg) menu, and then run the following block to configure the R environment to help with the display of outputs in the resulting R Notebook, and to prepare a `example.gdb` file geodatabase from an empty template in the `data/` folder:
 
 ```{r include=FALSE}
 # Run this line to disable magic quotes in output...
 options(useFancyQuotes = FALSE)
 
-# If a copy of data.gdb exists, delete it...
-if (file.exists('data.gdb')) {
-  unlink('data.gdb', recursive = TRUE)
+# If a copy of example.gdb exists, delete it...
+if (file.exists('data/example.gdb')) {
+  unlink('data/example.gdb', recursive = TRUE)
 }
 
-# Create a new folder named 'data.gdb' and copy the contents of 'empty.gdb' into it:
-if (!file.exists('data.gdb')) {
-  dir.create('data.gdb')
-  invisible(file.copy(paste0('empty.gdb/',list.files('empty.gdb')), 'data.gdb', overwrite = TRUE, recursive = FALSE, copy.mode = TRUE))
+# Create a new folder named 'example.gdb' and copy the contents of 'empty.gdb' into it:
+if (!file.exists('data/example.gdb')) {
+  dir.create('data/example.gdb')
+  invisible(file.copy(paste0('data/empty.gdb/',list.files('data/empty.gdb')), 'data/example.gdb', overwrite = TRUE, recursive = FALSE, copy.mode = TRUE))
 }
 ```
 ## Load the R-ArcGIS `arcgisbinding` package
@@ -124,11 +124,11 @@ arc.check_product()
 
 # Part B: Reading data from ArcGIS Datasets
 
-The `arcgisbinding` package provides two methods that enable you to easily read data directly from ArcGIS datasets.  For reading data, you will use `arc.open()` to create dataset objects that essentially serve as a connection to an existing ArcGIS dataset.  With a dataset object, you may then use `arc.select()` to connect to existing datasets and read features/tables into data frames in the R workspace.
+The `arcgisbinding` package provides two methods that enable you to easily read data directly from ArcGIS datasets.  For reading data, you will use `arc.open()` to create dataset objects that essentially serve as a connection to an existing ArcGIS dataset.  With a dataset object, you may then use `arc.select()` to connect to existing datasets and read features/tables into data frames in the R workspace, or `arc.raster()` to load raster datasets.
 
 ## Connecting to an ArcGIS dataset
 
-To use the `arc.open()` method to connect to an existing ArcGIS dataset, you must provide it with a single argument that specifies a path.  The path must point to a standard feature class, feature layer, or table in a format supported by ArcGIS Pro or ArcGIS Desktop.  These include simple files (e.g., shapefiles, csv, dBASE), geodatabases (file/enterprise), feature dataset components, etc.  In 64-bit/Pro, feature service URLs will also work.
+To use the `arc.open()` method to connect to an existing ArcGIS dataset, you must provide it with a single argument that specifies a path.  The path must point to a standard feature class, feature layer, table, or raster dataset in a format supported by ArcGIS Pro or ArcGIS Desktop.  These include simple files (e.g., shapefiles, csv, dBASE), geodatabases (file/enterprise), feature dataset components, GeoTiff images, etc.  In 64-bit/Pro, feature service URLs will also work.
 
 The returned result from the `arc.open()` method is a dataset object, which contains details about the spatial characteristics and attributes contained within the dataset.
 
@@ -169,6 +169,7 @@ The same data could be read with by providing the desired fieldnames as a named 
 
 ```{r}
 csd_df <- arc.select(csd, fields = c("PRNAME", "CSDNAME", "CSDUID"))
+class(csd_df)
 ```
 
 ***Tip:** using named arguments allows you to execute the function without memorizing the positional order of optional arguments, and/or omit optional that you do not want to define.  Also note the use of the `=` operator for named arguments, versus the `<-` assignment operator.* 
@@ -201,9 +202,9 @@ csd_df$popdens_t <- csd_income$popdens_t
 csd_df$gnr <- csd_income$gnr
 ```
 
-***Note:** This limitation may be addressed in a future version of the R-ArcGIS bridge.  For the time being, this workaround is needed.  Another alternative by converting the ArcGIS spatial data frame to an `sp` data frame, and using the `spdplyr` package is discussed later in this tutorial.*
+***Note:** This limitation may be addressed in a future version of the R-ArcGIS bridge.  For the time being, this workaround is needed.  Another alternative, by converting the ArcGIS spatial data frame to an `sp` data frame, and using the `spdplyr` package is discussed later in this tutorial.*
 
-It can be useful to rank or categorize data.  For example, we can categorize CSDs into quantiles using the `dplyr` `ntile()` method.  There are several other `dplyr` available for ranking data.  Type `?ranking` in the R console to read more - try adding a percentile rank of CSDs by population density, for example:
+It can be useful to rank or categorize data.  For example, we can categorize CSDs into quantiles using the `dplyr` `ntile()` method.  There are several other `dplyr` methods available for ranking data.  Type `?ranking` in the R console to read more - try adding a percentile rank of CSDs by population density, for example:
 
 ```{r}
 csd_df$income_group <- ntile(csd_df$income_median_t, 5)
@@ -237,11 +238,11 @@ Thus far we have learned how to work with ArcGIS spatial data frames, which can 
 
 ### Manipulation and visualization of spatial data
 
-* `arc.data2sp()` - which easily converts ArcGIS spatial data frames to `sp` data frame objects (either `SpatialPointsDataFrame`, `SpatialLinesDataFrame`, or `SpatialPolygonsDataFrame`)
-* `arc.sp2data()` - if you are finished performing spatial analysis with your data as `sp` data frame objects, you can use this method to convert to an ArcGIS spatial data frame object.
-* `arc.shape2sp()` - if you do not require the attributes associated with your features, this method may be used to convert an ArcGIS spatial data frame to simple `sp` spatial objects (`SpatialLines`, `SpatialPoints`, or `SpatailPolygons`)
+* `arc.data2sp()` - easily converts ArcGIS spatial data frames to `sp` data frame objects (`SpatialPointsDataFrame`, `SpatialLinesDataFrame`, or `SpatialPolygonsDataFrame`)
+* `arc.data2sf()` - converts ArcGIS spatial data frames to `sf` simple feature data frames (`POINT`, `MULTIPOINT`, `POLYGON`, `MULTIPOLYGON`, `LINESTRING`, or `MULTILINESTRING`)
+* `arc.shape2sp()` and `arc.shape2sf()` - if you do not require the attributes associated with your features, these methods may be used to convert an ArcGIS shape object (from an ArcGIS spatial data frame) into simple `sp` spatial objects (`SpatialLines`, `SpatialPoints`, or `SpatailPolygons`) or `sf` objects (`POINT`, `MULTIPOINT`, `POLYGON`, `MULTIPOLYGON`, `LINESTRING`, or `MULTILINESTRING`)
 
-By converting your ArcGIS data frame objects to `sp` spatial data frames, you will be able to use variety of existing packages and operations in R designed for working with spatial data.  The `sp` package for example makes it easy to generate map plots using the `spplot()` function.  Spatial data frames can also be manipulated using functions provided by the `spdplyr` package, which exposes many `dplyr`-like verbs.  Numerous other packages that provide geospatial analytical methods will accept or return `sp` data objects as inputs and outputs.
+By converting your ArcGIS data frame objects to `sp` spatial data frames you will be able to use variety of existing packages and operations in R designed for working with spatial data.  The `sp` package, for example, makes it easy to generate map plots using the `spplot()` function.  Spatial data frames can also be manipulated using functions provided by the `spdplyr` package, which exposes many `dplyr`-like verbs.  Numerous other packages that provide geospatial analytical methods will accept or return `sp` data objects as inputs and outputs.  Similarly, by converting data to `sf` objects, you have the ability to use many standard spatial operation functions provided by the `sf` package (e.g., `st_union`, `st_intersection`, `st_distance`).
 
 In the block of code below, we can see the `csd_df` data frame with census subdivision boundaries is converted into an `sp` data frame object, that is assigned to the `csd_sp` variable.  Using the `spplot` and the `filter()` function from the `spdplyr` package, we can easily generate a map plots of polygons for subsets of data from the spatial data frame.  In this case, we are displaying the median income levels for census subdivisions in New Brunswick, or British Columbia. 
 
@@ -268,9 +269,9 @@ income_df <- arc.open('data/census/census2016.gdb/income2016csd')  %>%
         arc.select(c("geo_code", "gnr", "pop2016_t", "popdens_t", "income_median_t"), where_clause = "gnr is not null and gnr < 25")
 
 # Join income data to the saskatchewan boundaries using by using an intermediate sp data frame 
-csd_income_spatial <- arc.sp2data(left_join(arc.data2sp(sask_df), income_df, by = c("CSDUID" = "geo_code")))
+csd_income_sp <- left_join(arc.data2sp(sask_df), income_df, by = c("CSDUID" = "geo_code"))
 
-class(csd_income_spatial)
+class(csd_income_sp)
 ```
 
 The resulting `csd_income_spatial` data frame created above will have ArcGIS spatial properties, plus the additional columns added directly to it from the joined data frame.  If you inspect it in the *Environment* tab in **RStudio**, you will see its first 7 columns are identical to the `csd_df` that we have been working with so far in this tutorial.
@@ -329,81 +330,77 @@ spG.sim20 <- mc.spGini(Nsim=19, 15, on_spdata$income_median_t, coords[,1], coord
 spG.sim20$pseudo.p
 ```
 
-By running 19 (or more) simulations, it can be argued that the observed results from `spGini()` are significant by obtaining pseudo p-value of 0.05 or lower (i.e., suggesting that the probability that the observed result is due to chance is 5% or less).
+By running 19 (or more) simulations, it can be determined whether the observed results from `spGini()` are significant by obtaining pseudo p-value of 0.05 or lower (i.e., suggesting that the probability that the observed result is due to chance is 5% or less).
 
 # Part D: Writing data from R to ArcGIS datasets
 
 At this point, we have shown that ArcGIS datasets can be read easily into an R session, and demonstrated how you can manipulate spatial data frames, visualize the spatial data in map plots, and use the spatial data objects in spatial analyses.  However, the **R-ArcGIS** bridge works in both directions, enabling you to further analyze, visualize, and collaborate by connecting the outputs of your R programs to the ArcGIS platform.
 
-The simplest approach for this that the `arcgisbinding` package provides is to write your data to ArcGIS datasets using the `arc.write()` method.  With this function, you can write spatial and tabular data frames to conventional ArcGIS dataset formats. The `arc.write()` method requires at least two arguments:
+The simplest approach for this that the `arcgisbinding` package provides is to write your data to ArcGIS datasets using the `arc.write()` method.  With this function, you can write spatial and tabular data frames, and raster objects to conventional ArcGIS dataset formats. The `arc.write()` method requires at least two arguments:
 
-* `path`: the full or relative path to an ArcGIS dataset that will be created (\*.shp, \*.csv, \*.dbf, \*.gdb featureclass/table, etc)
-* `data`: the data frame to be written (ArcGIS or `sp` spatial data frame, or simple tabular data frame).  This must be an ArcGIS spatial data frame, an `sp` data frame, or a simple tabular data frame.
+* `path`: the full or relative path to an ArcGIS dataset that will be created (e.g., \*.shp, \*.csv, \*.dbf, \*.gdb featureclass/table/raster, \*.img, \*.tif, etc.).
+* `data`: the data frame to be written (ArcGIS or `sp` spatial data frame, or simple tabular data frame).  This must be an ArcGIS spatial data frame, an `sp` data frame, an `sf` object, a simple tabular data frame, or a `RasterLayer` or `RasterBrick` object from the `raster` package.
 
-Optional arguments include:
+If you are using the `arc.write()` method from to overwrite an output dataset, you can provide an additional `overwrite = TRUE` parameter to the arguments.  This will delete any existing dataset at the output path, and replace it with the new one that you are writing.
 
-* `coords`: list containing geometry information (e.g., to add spatial properties to tabular data)
-* `shape_info`: a list object containing geometry type and spatial reference information
+***Note:** When writing output datasets, you will not see any error or confirmation prompt if a dataset at the specified path already exists when you provide the `overwrite = TRUE` option.*
 
-In the code block below, you can see the Ontario census subdivision data we analyzed being converted to an ArcGIS data frame object using the `arc.sp2data()` function, assigned to the `on_dfdata` variable name.  This is then written as a new feature class in an a sample `data.gdb` file geodatabase: 
+In the code block below, you can see the Ontario census subdivision data we analyzed as an `sp` spatial dataframe being written as a new feature class in an a sample `example.gdb` file geodatabase: 
 
 ```{r eval=-1}
 ?arc.write
 
-on_dfdata <- arc.sp2data(on_spdata)
-
-arc.write('data.gdb/ontario_data', on_dfdata, shape_info=list(type="Polygon", WKT=csd@shapeinfo$WKT))
+arc.write('data/example.gdb/ontario_data', on_spdata, overwrite = TRUE)
 ```
 
 ## Choosing an output path for `arc.write()`:
 
 When you specify the output path to use with `arc.write()`, ensure that you appropriately define a new path for a shapefile inside a regular folder, or to a new featureclass inside of an ArcGIS geodatabase.  These paths may be relative, or absolute file locations (as with the `arc.open()` command), for example:
 
-* `arc.write('data.gdb/ontario_data', on_dfdata)` - creates a new feature class in an existing `data.gdb` file geodatabase
-* `arc.write('data.sde/ontario_data', on_dfdata)` - creates a new feature class in an existing enterprise geodatabse, identified by the `data.sde` connection file
-* `arc.write('data/ontario_data.shp' on_dfdata)` - creates a new shapefile in the `data` folder location
+* `arc.write('example.gdb/ontario_data', on_spdata)` - creates a new feature class in an existing `example.gdb` file geodatabase
+* `arc.write('data.sde/ontario_data', on_spdata)` - creates a new feature class in an existing enterprise geodatabse, identified by the `data.sde` connection file
+* `arc.write('data/ontario_data.shp' on_spdata)` - creates a new shapefile in the `data` folder location
 
-If you want to save tabular data, specify path to a new table name in a geodatabase, or an appropriate tabular file format in a folder. If the dataset you are saving is in an ArcGIS spatial data frame, and you only want to save the tabular data, you can wrap the variable in the `data.frame()` function to discard the spatial information.  For example:
+If you want to save tabular data, specify path to a new table name in a geodatabase, or an appropriate tabular file format in a folder. If you only want to save tabular data from a spatial data frame object (whether it is an `arcgisbinding`, `sp`, or `sf` data object), you can wrap the variable in the `data.frame()` function to discard the spatial information.  For example:
 
-* `arc.write('data.gdb/ontario_data_tbl', data.frame(on_dfdata))` - creates a new table in an existing `data.gdb` file geodatabase
-* `arc.write('data/ontario_data_tbl.dbf', data.frame(on_dfdata)` - creates a new table in dBASE format in the `data` folder
-* `arc.write('data/ontario_data_tbl.csv' data.frame(on_dfdata))` - creates a new table in comma-separated variable text format in the `data` folder
+* `arc.write('example.gdb/ontario_data_tbl', data.frame(on_spdata))` - creates a new table in an existing `example.gdb` file geodatabase
+* `arc.write('data/ontario_data_tbl.dbf', data.frame(on_spdata)` - creates a new table in dBASE format in the `data` folder
+* `arc.write('data/ontario_data_tbl.csv' data.frame(on_spdata))` - creates a new table in comma-separated variable text format in the `data` folder
 
 ***Note:** fieldnames in feature classes and tables will be truncated when written to shapefile or dBASE formats.  When written to geodatabases, invalid characters in fieldnames will be converted to underscores, and fieldnames may otherwise be converted to upper or lowercase depending on the underlying database system.* 
 
-It is important also to be aware that the `arc.write()` method from the `arcgisbinding` package does not currently support overwriting existing datasets.  For example, if you run the sample code block above twice, it will report an error the second time because the `ontario_data` feature class already exists in the output `data.gdb` file geodatabase. You can handle this when running standalone R scripts in one of two ways:
+If you are writing raster data objects, then you must similarly specify a path to a new dataset name in a geodatabase, or to an appropriate raster file format in a folder:
 
-* Use a unique output path/filename each time you use `arc.write()` (e.g., by using the `tempfile()` method in the R base)
-* Delete any output dataset at a given path before using the same path with `arc.write()`.  With this approach, you can use the base R file manipulation functions (see `?files` for details) to delete simple file/folder paths.  However, for ArcGIS geodatabases (either file or enterprise), ArcGIS software (or perhaps a Python script using ArcPy commands) must be used to delete or move datasets.
+* `arc.write('example.gdb/raster_dataset', raster_data)` - creates a new raster dataset in an existing `example.gdb` file geodatabase
+* `arc.write('data/raster_dataset.tif', raster_data)` - creates a GeoTiff file in the `data` folder
 
-When an R script is run as a script tool in an ArcGIS Toolbox, overwriting output files is less of a concern when the paths are defined using output parameters. In this context, the ArcGIS geoprocessing environment will either prevent overwriting existing datasets, or cleanly remove them before executing the script tool (based on whether the geoprocessing option to allow tools to overwrite outputs is enabled).
-
-## Defining the `spatial_info` parameter
-
-You will typically only need to supply two parameters in the list object supplied in the `shape_info` parameter for the `arc.write()` function:
-
-* `type` - the geometry type, either `"Point"`, `"Polyine"`, `"Polygon"`
-* `WKT` - the Well-known text representation of the dataset's spatial reference system
-
-If you are writing data that have the same shape type and projection as an ArcGIS dataset object created by the `arc.open()` command, then you can pass the `@shapeinfo` property of the dataset object directly as the `shape_info` parameter for the `arc.write()` command.  In the earlier codeblock, the data that were written to the `data.gdb/ontario_data` feature class have the same geometry type and same spatial reference system as the `csd` data object. Thus the `arc.write()` command would achieve the same by supplying `csd@shapeinfo` as the value for the `shape_info` argument instead of defining a new `list()` object.
+When an R script is run as a script tool in an ArcGIS Toolbox, overwriting output files is less of a concern when the paths are defined using output parameters. In this context, the ArcGIS geoprocessing environment will either prevent overwriting existing datasets, or cleanly remove them before executing the script tool (based on whether the geoprocessing option to allow tools to overwrite outputs is enabled).  In this context, it should not be required to use the `overwrite` parameter.
 
 ## Working with spatial reference definitions:
 
 In some cases, depending on your specific data source and/or the process through which your data are created, you may need to use different representations of spatial reference systems.  The `arcgisbinding` package provides two convenience methods for converting between Well-known ID / Well-known Text and Proj.4 spatial reference systems definitions:
 
-* `arc.fromWktToP4()` - converts a Well-known ID or Well-known Text spatial reference to Proj.4 text
-* `arc.fromP4ToWkt()` - converts a Proj.4 spatial reference text string to Well-known text format.  You may use '+init=epsg:<id>' (in ArcGIS Pro only) to convert spatial references from EPSG identifiers to WKT.
+* `arc.fromWktToP4()` - converts a Well-known ID (a.k.a., SRID) or Well-known Text spatial reference to Proj.4 text
+* `arc.fromP4ToWkt()` - converts a Proj.4 spatial reference text string to Well-known text format.
 
-***Note:** these functions are fully-functional only when executed in ArcGIS Pro as a script tool.  You can experiment with them more in the context of a script tool executed from ArcGIS Pro, after completing the next tutorial.*
+For example, to convert the standard web mercator projection from a its well-known ID to Proj.4 text, then back to a full WKT text string:
+
+```{r}
+wm_p4 <- arc.fromWktToP4(3857)
+wm_p4
+
+wm_wkt <- arc.fromP4ToWkt(wm_p4)
+wm_wkt
+```
 
 # Exercise 1
 
 At this point, you are now able to read, manipulate, analyze, visualize, and write ArcGIS datasets in the R programming language using the `arcgisbinding` package installed by the **R-ArcGIS** bridge. To test your skills, try the following:
 
-* Read the 'data/toronto/neighbourhoods_crime.shp' shapefile into a new spatial data frame
-* Load the 'data/toronto/wb_civics_2011.csv' table into a new data frame, and join its columns to the neighbourhoods_crime data frame. *Hint: one of these stores its identifier as a character vector*
+* Load the `data/toronto/neighbourhoods_crime.shp` shapefile into a new spatial data frame
+* Load the `data/toronto/wb_civics_2011.csv` table into a new data frame, and join its columns to the neighbourhoods_crime data frame. *Hint: one of these stores its identifier as a character vector*
 * Add a column with quantile ranks, group/summarize some of the data, create some box plots.
-* Write the data with the columns added from the wb_civics_2011.csv data back to a new shapefile. *Hint: remember the result of a join using dplyr with an ArcGIS spatial data frame does not return shape data – copy columns back to the original data frame created by the arc.select() command, or use an intermediate `sp` data frame.*
+* Write the data with the columns added from the wb_civics_2011.csv data back to a new shapefile. *Hint: remember the result of a join using dplyr with an ArcGIS spatial data frame does not return shape data – copy columns back to the original data frame created by the arc.select() command, or convert the data to an `sp` spatial data frame, then use the join commands provided by the `spdplyr` package.*
 * Add the new shapefile to your map in ArcGIS Pro or ArcMap, and style it by the quantile ranks you added.
 
 
@@ -411,7 +408,7 @@ At this point, you are now able to read, manipulate, analyze, visualize, and wri
 
 The `arcgisbinding` package provided by the **R-ArcGIS** bridge is an effective tool to integrate ArcGIS datasets efficiently into your R programs.  It also allows you to generate new ArcGIS datasets as outputs from your R programs to make results from your analyses easily viewed and processed in ArcGIS applications.  This is a significant advantage for developing R programs that need to work with spatial datasets that are easily managed by ArcGIS applications.
 
-Integration of your R scripts with the ArcGIS platform is even more effective if you implement them as script tools in an ArcGIS toolbox.  Doing so makes input/output of datasets and numerical/text parameter values seamless, and enables immediate visualization of feature classes and tables output by your tools.  Your R script tools can be further integrated into larger processes, for example by incorporating them into an ArcGIS Model Builder workspace to create more advanced geoprocessing workflows.
+Integration of your R scripts with the ArcGIS platform is even more effective if you implement them as script tools in an ArcGIS toolbox.  Doing so makes input/output of datasets and numerical/text parameter values seamless, and enables immediate visualization of feature classes and tables output by your tools.  Your R script tools can be further integrated into larger processes, for example by incorporating them into an ArcGIS Model Builder workspace, or importing them to Python scripts using ArcPy commands to create more advanced geoprocessing workflows.
 
 It is highly recommended that you continue the tutorial series by completing the *Building R Script Tools* tutorial. This will teach you how to create toolboxes that integrate your R code with ArcGIS Pro or ArcGIS Desktop.
 
@@ -419,5 +416,5 @@ It is highly recommended that you continue the tutorial series by completing the
 <hr />
 <img src="images/logo.png" style="float:right; margin:0 0 20px 20px;" /> <img src="images/CC-BY-NC-SA-4.0.png" style="float:right; clear:right;" /> 
 <a href="https://hed.esri.ca" /><h1>https://hed.esri.ca</h1></a>
-© 2017 Esri Canada. All rights reserved. Trademarks provided under license from Environmental Systems Research Institute Inc. Other product and company names mentioned herein may be trademarks or registered trademarks of their respective owners. Errors and omissions excepted. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+© 2018 Esri Canada. All rights reserved. Trademarks provided under license from Environmental Systems Research Institute Inc. Other product and company names mentioned herein may be trademarks or registered trademarks of their respective owners. Errors and omissions excepted. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 <!-- end formatted footer & title -->

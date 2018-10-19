@@ -3,14 +3,14 @@ output: html_notebook
 ---
 
 <!-- start formatted header & title -->
-<img src="images/logo.png" style="margin:20px;" /> <p style="margin:20px 20px 0 0; float:right; text-align:right;">Tutorial for ArcGIS Pro 2.0 / ArcGIS Desktop 10.5.1<br /> R Scripting Basics</p>
+<img src="images/logo.png" style="margin:20px;" /> <p style="margin:20px 20px 0 0; float:right; text-align:right;">Tutorial for ArcGIS Pro 2.2 / ArcGIS Desktop 10.6.1<br /> R Scripting Basics</p>
 <hr />
 <h1 style="text-align: center; font-weight: bold;">R Scripting Basics</h1>
 <!-- end formatted header & title -->
 
 # Tutorial Overview
 
-R is an open-source statistical computing language that offers a large suite of data analysis and statistical tools, and is currently the de facto standard for statistical data analysis and visualization for academics and other communities. By completing this tutorial, you will learn basic introductory concepts in the R that will enable you to begin working with the R scripting language to execute commands and manage various data. This basic knowledge will give you have the pre-requisites needed to manage data efficiently and perform data analysis using the advanced statistical capabilities of R and its many third-party packages. It will also prepare you for follow-up tutorials in this R-ArcGIS series, which introduce you to the use of the R-ArcGIS Bridge that enables you to use ArcGIS datasets within the R programming language, and teach you how to create script tools in ArcGIS.
+R is an open-source statistical computing language that offers a large suite of data analysis and statistical tools, and is currently the de facto standard for statistical data analysis and visualization for academics and other communities. By completing this tutorial, you will learn basic introductory concepts in R that will enable you to begin working with the R scripting language to execute commands and manage various data. This basic knowledge will give you the pre-requisites needed to manage data efficiently and perform data analysis using the advanced statistical capabilities of R and its many third-party packages. It will also prepare you for follow-up tutorials in this R-ArcGIS series, which introduce you to the use of the R-ArcGIS Bridge that enables you to use ArcGIS datasets within the R programming language, and teach you how to create script tools in ArcGIS.
 
 ### Skills
 
@@ -31,10 +31,10 @@ The following classroom time is required to complete this tutorial:
 
 * *Technology*:
     * Internet browser (e.g., Mozilla Firefox, Google Chrome, Safari)
-    * R Statistical Computing Language (version 3.2.0+)
-    * RStudio Desktop (version 1.0.153+)
-    * ArcGIS Pro 1.1+ (2.0+ recommended) or ArcGIS Desktop 10.3.1+ (10.5.1+ recommended)
-    * R-ArcGIS Bindings (1.0.0.128+ recommended)
+    * R Statistical Computing Language (version 3.3.2+)
+    * RStudio Desktop (version 1.1.456+)
+    * ArcGIS Pro 1.1+ (2.2+ recommended) or ArcGIS Desktop 10.3.1+ (10.6.1+ recommended)
+    * R-ArcGIS Bindings (1.0.1.232+ recommended)
  
 * *Data*:
     * Data for this tutorial are included as part of the download in the packaged `data` folder.
@@ -51,7 +51,7 @@ The following classroom time is required to complete this tutorial:
 
 The Education and Research Group at Esri Canada makes every effort to present accurate and reliable information. The Web sites and URLs used in this tutorial are from sources that were current at the time of production, but are subject to change without notice to Esri Canada.
 
-* Production Date: November 2017
+* Production Date: October 2018
 
 ## Background Information
 
@@ -91,9 +91,9 @@ You can get started by opening the **RStudio** project file, *`r-arcgis-rstudio.
 
 If you prefer to use the default **RGui** application, open it from the **Windows Start* menu. When the interface has loaded, choose the *File* > *Change dir...* menu option, and select the folder that contains the tutorial files.
 
-At this point, in either **RStudio** or **RGui** your current working directory should be pointing to the folder that contains the tutorial files. To confirm this, execute the `getwd()` command in the R console. If the path reported by this is not the folder that contains the tutorial files, then you can set it in the R console by executing `setwd("<path>")`, and supplying the path to the tutorial folder. For example, if the tutorial files were extracted to your hard disk at `D:\r-arcgis`, then execute `setwd("D:/r-arcgis")` in the R console to set this as the working directory. Confirm again by executing `getwd()` in the R console to ensure that the working directory of the current R session is correct.
+At this point, in either **RStudio** or **RGui** your current working directory should be pointing to the folder that contains the tutorial files. To confirm this, execute the `getwd()` command in the R console. If the path reported by this is not the folder that contains the tutorial files, then you can set it in the R console by executing `setwd("<path>")`, and supplying the path to the tutorial folder. For example, if the tutorial files were extracted to your hard disk at `D:\r-arcgis-tutorials`, then execute `setwd("D:/r-arcgis-tutorials")` in the R console to set this as the working directory. Confirm again by executing `getwd()` in the R console to ensure that the working directory of the current R session is correct.
 
-*Note: it is recommended that you use forward slash `/` characters when representing paths in R, instead of the Windows default backslash `\` path separator. If using the backslash character, you will need to escape it in text strings with double-backslash characters. For example: `"D:\\r-arcgis"`
+*Note: it is recommended that you use forward slash `/` characters when representing paths in R, instead of the Windows default backslash `\` path separator. If using the backslash character, you will need to escape it in text strings with double-backslash characters. For example: `"D:\\r-arcgis-tutorials"`
 
 ## Working with R scripts in RGui and RStudio:
 
@@ -119,7 +119,7 @@ The same steps can be used to execute a highlighted range of code. For example:
 
 ## Working with R Notebooks in RStudio:
 
-**RStudio** features the ability to compose *R Notebooks*, which are simple text documents using *R Markdown* syntax. Within the markdown text, 'chunks' of R code can be inserted within the text. These blocks of R code start with \`\`\`\{r\} on a separate line, followed by one or more lines of R code, and are terminated with three backtick \`\`\` characters on a separate line. The surrounding markdown text enables publication-quality text to be composed, while the embedded 'chunks' of R code can be executed interactively in **RStudio** like a regular R script.
+**RStudio** features the ability to compose *R Notebooks*, which are simple text documents using *R Markdown* syntax. Within the markdown text, 'chunks' of R code can be inserted within the text. These blocks of R code start with three backtick characters and the letter 'r' (\`\`\`\{r\}) on a separate line, followed by one or more lines of R code, and are terminated with three more backtick characters (\`\`\`) on a separate line. The surrounding markdown text enables publication-quality text to be composed, while the embedded 'chunks' of R code can be executed interactively in **RStudio** like a regular R script.
 
 To start a new markdown document in RStudio:
 
@@ -253,7 +253,7 @@ load_pkgs(c("arcgisbinding", "dplyr", "sp", "maptools"))
 
 # Part C: Working with Data in R
 
-R is an object-oriented language. Data, functions, etc. are all stored in active memory as objects that can be assigned to variable names in R code. While will likely work with a variety of different objects and data types as you develop programs in the R language, it is important to understand the core data types and how to work with them in R code.
+R is an object-oriented language. Data, functions, etc. are all stored in active memory as objects that can be assigned to variable names in R code. While you will likely work with a variety of different objects and data types as you develop programs in the R language, it is important to understand the core data types and how to work with them in R code.
 
 ## Basic objects and data types
 
@@ -267,7 +267,7 @@ There are several object types that are provided by the core R language. Each ob
 | matrix           | numeric, character, complex, or logical                          | No  |
 | data frame       | numeric, character, complex, or logical                          | Yes |
 | ts (time series) | numeric, character, complex, or logical                          | No  |
-| list             | numeric, character, complex, logical, function, expression, ... | Yes |
+| list             | numeric, character, complex, logical, function, expression, ...  | Yes |
 
 Vector and data frame objects are typically used for storing and working with data. List objects are useful in R programming, as they allow storage of multiple objects, and can reference its elements by name (e.g., similar to dictionary objects in Python). For the purposes of this tutorial series, we will focus on the more commonly used vector, data frame, and list object types. For more details on any of these object types in the R language, use the `help(object_type)` command.
 
@@ -340,7 +340,7 @@ fib + c(1:12)
 fib + c(1:15)
 
 # the operation will 'wrap around' if the longer vector is an even multiple of the shorter
-fib + c(1:24)
+fib + c(1:36)
 
 # fib values squared
 fib * fib
@@ -382,7 +382,7 @@ fib[fib %% 5 == 0]  # Conditions can be used inline too
 
 ### Accessing data in Data frame objects
 
-To select values from a data frame, you need to provide two parameters in the square brackets, separated by a comma. The first parameter identifies the rows you want (blank returns all rows), and the second identifies the columns to be returned (blank returns all columns). You can use a list of numeric indexes (starting at 1), or logical vectors. For the coulmns, you can also specify column names using a character vector:
+To select values from a data frame, you need to provide two parameters in the square brackets, separated by a comma. The first parameter identifies the rows you want (blank returns all rows), and the second identifies the columns to be returned (blank returns all columns). You can use a list of numeric indexes (starting at 1), or logical vectors. For the columns, you can also specify column names using a character vector:
 
 ```{r}
 # Both columns where fib > 5
@@ -417,7 +417,7 @@ pairs[["month"]]
 pairs$fib
 ```
 
-***Note***: in RStudio, as you work through the R Markdown file, all of the lines or blocks of code that you execute from the chunks of code are being executed in R session displayed in the Console panel. If you place your cursor in the console, you can execute any code and work with the variables you have created so far. You may also use the up/down arrow keys to access any previously executed commands.
+***Note***: in RStudio, as you work through the R Markdown file, all of the lines or blocks of code that you execute from the chunks of code are being executed in the R session displayed in the Console panel. If you place your cursor in the console, you can execute any code and work with the variables you have created so far. You may also use the up/down arrow keys to access any previously executed commands.
 
 # Exercise 1
 
@@ -491,7 +491,7 @@ The `filter()` method, for example, is equivalent to the base R syntax for subse
 census_csd[census_csd$geo_code == 3520005, ]
 
 # Selecting the same with dplyr's filter() method:
-filter(census_csd, geo_code == 3520005 )    
+filter(census_csd, geo_code == 3520005)
 ```
 
 More complicated filters, or queries, can be composed easily by incorporating conventional operators, or specifying multiple conditional statements that must all be satisified as separate arguments:
@@ -660,5 +660,5 @@ It is highly recommended that you continue the tutorial series by completing the
 <hr />
 <img src="images/logo.png" style="float:right; margin:0 0 20px 20px;" /> <img src="images/CC-BY-NC-SA-4.0.png" style="float:right; clear:right;" /> 
 <a href="https://hed.esri.ca" /><h1>https://hed.esri.ca</h1></a>
-© 2017 Esri Canada. All rights reserved. Trademarks provided under license from Environmental Systems Research Institute Inc. Other product and company names mentioned herein may be trademarks or registered trademarks of their respective owners. Errors and omissions excepted. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+© 2018 Esri Canada. All rights reserved. Trademarks provided under license from Environmental Systems Research Institute Inc. Other product and company names mentioned herein may be trademarks or registered trademarks of their respective owners. Errors and omissions excepted. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 <!-- end formatted footer & title -->
