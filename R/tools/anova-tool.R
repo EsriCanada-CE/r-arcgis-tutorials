@@ -122,5 +122,7 @@ test_tool <- function(){
   message(paste(c("Results saved to: ",out_dir), collapse=""))
 }
 
-# Run the test_tool() function:
-# test_tool()
+# If running as a stand-alone script, test the tool:
+if (!exists("arc.env") || is.null(arc.env()$workspace)) {
+  test_tool()
+}

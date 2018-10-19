@@ -89,7 +89,7 @@ test_tool = function(){
   
   tool_exec(
     list(
-      in_data = "CSDsJoined.lyrx",
+      in_data = "data/census/CSDsJoined.lyrx",
       group_fields = NULL,
       summarize_fields = list("income2016csd.pop2016_t","income2016csd.pop2011_t"),
       summarize_funs = list("mean",'median','min','max','sd')
@@ -101,5 +101,8 @@ test_tool = function(){
   message(paste(c("Results saved to: ",out_dir), collapse=""))
 }
 
-# test_tool()
+# If running as a stand-alone script, test the tool:
+if (!exists("arc.env") || is.null(arc.env()$workspace)) {
+  test_tool()
+}
 

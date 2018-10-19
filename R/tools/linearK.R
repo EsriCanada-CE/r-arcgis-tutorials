@@ -79,8 +79,8 @@ test_tool <- function(){
   
   tool_exec(
     list(
-      in_points = "../../data/toronto/KSI_byc.shp",
-      in_lines = "../../data/toronto/CENTRELINE_WGS84_byc.shp",
+      in_points = "data/toronto/KSI_byc.shp",
+      in_lines = "data/toronto/CENTRELINE_WGS84_byc.shp",
       num_sims = 0
     ),
     list(
@@ -92,4 +92,7 @@ test_tool <- function(){
   message(paste(c("Results saved to: ",out_dir), collapse=""))
 }
 
-# test_tool()
+# If running as a stand-alone script, test the tool:
+if (!exists("arc.env") || is.null(arc.env()$workspace)) {
+  test_tool()
+}
