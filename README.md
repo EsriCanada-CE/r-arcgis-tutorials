@@ -1,12 +1,12 @@
 ![Esri Canada](https://esricanada-ce.github.io/r-arcgis-tutorials/images/logo.png "Esri Canada")
 # Introduction to R Scripting with ArcGIS
-#### Tutorials for ArcGIS Pro 2.0 / ArcGIS Desktop 10.5.1
+#### Tutorials for ArcGIS Pro 2.2 / ArcGIS Desktop 10.6.1
 
 ---
 
 ## Overview
 
-This package consists of four tutorials that deal with integrating the statistical programming language R with ArcGIS for Desktop.  Several concepts are covered which include configuring ArcGIS with R, writing basic R scripts, writing R scripts that use ArcGIS data and functionality, and constructing R Tools for use within ArcGIS Pro or ArcGIS Desktop.  It is recommended that the tutorials are completed in squential order.
+This package consists of four tutorials that deal with integrating the statistical programming language R with ArcGIS for Desktop.  Several concepts are covered which include configuring ArcGIS with R, writing basic R scripts, writing R scripts that work with ArcGIS data, and constructing R Tools for use within ArcGIS Pro or ArcGIS Desktop.  It is recommended that the tutorials are completed in squential order.
 
 Each of the four tutorials (as well as a version of [this document](https://esricanada-ce.github.io/r-arcgis-tutorials/0-Intro-to-R-ArcGIS_package.pdf)), can viewed direclty from your Web browser by following the links below.  However, you must obtain a complete copy of the tutorial files by downloading the [latest release](https://github.com/EsriCanada-CE/r-arcgis-tutorials/releases/latest) (or by cloning the [tutorial repository](https://github.com/EsriCanada-CE/r-arcgis-tutorials/) on GitHub) if you wish to follow the tutorials interactively using ArcGIS and R softare, along with pre-configured sample data.
 
@@ -31,7 +31,7 @@ Each of the four tutorials (as well as a version of [this document](https://esri
    * Creating and configuring script tools in an ArcGIS toolbox to execute R code
    * Integrating R script tools into Model Builder workspaces<br /><br />
 
-© 2017 Esri Canada. All rights reserved. Trademarks provided under license
+© 2018 Esri Canada. All rights reserved. Trademarks provided under license
 from Environmental Systems Research Institute Inc. Other product and
 company names mentioned herein may be trademarks or registered
 trademarks of their respective owners. Errors and omissions excepted. This work is licensed

@@ -18,7 +18,7 @@ tool_exec <- function(in_params, out_params) {
   # You can assign input and output parameters to variables by specifying the
   # the appropriate element from the parameter lists.
   input_value <- in_params[[1]]
-  result <- out_params[[1]]
+  result_path <- out_params[[1]]
   
   print(input_value)
   print(class(input_value))
@@ -71,11 +71,12 @@ test_tool <- function(){
       value = 5
     ),
     list(
-      output = "data/result.shp"
+      result_path = "data/result.shp"
     )
   )
 }
 
-# Uncomment to test directly in R/RStudio:
-# test_tool()
-
+# Test the tool if running directly in R/RStudio:
+if (!exists("arc.env") || is.null(arc.env()$workspace)) {
+  test_tool()
+}
