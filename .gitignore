@@ -22,3 +22,5 @@ r-arcgis-arcmap.tbx
 *.tmp
 Gpmessages
 .git
+index/
+data.gdb

@@ -1,6 +1,6 @@
 ![Esri Canada](https://highered-esricanada.github.io/r-arcgis-tutorials/images/logo.png "Esri Canada")
 # Introduction to R Scripting with ArcGIS
-#### Tutorials for ArcGIS Pro 3.3
+#### Tutorials for ArcGIS Pro 3.4
 ---
 
 ## Overview
@@ -32,7 +32,7 @@ Each of the four tutorials (as well as a version of [this document](https://high
 
 ---
 
-© 2018 Esri Canada. All rights reserved. Trademarks provided under license
+© 2024 Esri Canada. All rights reserved. Trademarks provided under license
 from Environmental Systems Research Institute Inc. Other product and
 company names mentioned herein may be trademarks or registered
 trademarks of their respective owners. Errors and omissions excepted. This work is licensed
