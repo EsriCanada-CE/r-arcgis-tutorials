@@ -1,7 +1,6 @@
 ![Esri Canada](https://highered-esricanada.github.io/r-arcgis-tutorials/images/logo.png "Esri Canada")
 # Introduction to R Scripting with ArcGIS
-#### Tutorials for ArcGIS Pro 2.2 / ArcGIS Desktop 10.6.1
-
+#### Tutorials for ArcGIS Pro 3.3
 ---
 
 ## Overview
