@@ -2,7 +2,6 @@
 *.lock
 *.ini
 *.pptx
-*.7z
 .Rproj.user
 .backup
 data/census/
@@ -24,4 +23,3 @@ Gpmessages
 .git
 index/
 data.gdb
-data/
