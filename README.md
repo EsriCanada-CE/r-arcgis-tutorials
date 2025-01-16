@@ -1,4 +1,4 @@
-![Esri Canada](https://highered-esricanada.github.io/r-arcgis-tutorials/images/logo.png "Esri Canada")
+![Esri Canada](images/logo.png "Esri Canada")
 # Introduction to R Scripting with ArcGIS
 #### Tutorials for ArcGIS Pro 3.4
 ---
