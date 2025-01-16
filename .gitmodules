@@ -1,6 +1,0 @@
-[submodule "resources/r-sample-tools"]
-	path = resources/r-sample-tools
-	url = https://github.com/R-ArcGIS/r-sample-tools.git
-[submodule "resources/r-bridge-install"]
-	path = resources/r-bridge-install
-	url = https://github.com/R-ArcGIS/r-bridge-install.git
